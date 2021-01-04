@@ -6,7 +6,7 @@ On-line POMDP Planning Toolkit (OPPT) is a C++ software-toolkit for approximatin
 
 ## Installing the dependencies
 
-### On-line installation script
+### One-line installation script
 OPPT provides an installation script that installs all the dependencies:
 
 	cd <oppt_root_folder>
