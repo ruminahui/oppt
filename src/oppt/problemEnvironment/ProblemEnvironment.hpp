@@ -886,27 +886,31 @@ private:
 
             if (terminal)
                 break;
+
+            //getchar();
         }
 
         FloatType totalTimeTaken = (oppt::clock_ms() - t0) / 1000.0;
 
-        stepResult.serialize(os);
+        // Disable repeated step serialization for now 
 
-        //finalState = stepResult.currentState;
-        os << "FINAL_STATE_BEGIN\n";
-        if (finalState)
-            finalState->serialize(os, "S");
-        os << "\n";
-        os << "FINAL_STATE_END\n";
-        if (serializeLastBelief && problemEnvironmentOptions_->saveParticles) {
-            beliefParticles = solver_->getBeliefParticles();
-            serializeBeliefParticles(os, beliefParticles);
-        }
+        // stepResult.serialize(os);
+
+        // //finalState = stepResult.currentState;
+        // os << "FINAL_STATE_BEGIN\n";
+        // if (finalState)
+        //     finalState->serialize(os, "S");
+        // os << "\n";
+        // os << "FINAL_STATE_END\n";
+        // if (serializeLastBelief && problemEnvironmentOptions_->saveParticles) {
+        //     beliefParticles = solver_->getBeliefParticles();
+        //     serializeBeliefParticles(os, beliefParticles);
+        // }
         os << "Total discounted reward: " << totalDiscountedReward << endl;
-        if (success)
-            os << "Run successful: True\n";
-        else
-            os << "Run successful: False\n";
+        // if (success)
+        //     os << "Run successful: True\n";
+        // else
+        //     os << "Run successful: False\n";
         os << "Num steps: " << currentStep << endl;
         os << "Total time taken: " << totalTimeTaken * 1000.0 << "ms" << endl;
 
