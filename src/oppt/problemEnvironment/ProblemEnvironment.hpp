@@ -897,15 +897,17 @@ private:
         // stepResult.serialize(os);
 
         // //finalState = stepResult.currentState;
-        // os << "FINAL_STATE_BEGIN\n";
-        // if (finalState)
-        //     finalState->serialize(os, "S");
-        // os << "\n";
-        // os << "FINAL_STATE_END\n";
-        // if (serializeLastBelief && problemEnvironmentOptions_->saveParticles) {
-        //     beliefParticles = solver_->getBeliefParticles();
-        //     serializeBeliefParticles(os, beliefParticles);
-        // }
+
+        // Use this as the flag for parsing the final terminal state
+        os << "FINAL_STATE_BEGIN\n";
+        if (finalState)
+            finalState->serialize(os, "S");
+        os << "\n";
+        os << "FINAL_STATE_END\n";
+        if (serializeLastBelief && problemEnvironmentOptions_->saveParticles) {
+            beliefParticles = solver_->getBeliefParticles();
+            serializeBeliefParticles(os, beliefParticles);
+        }
         os << "Total discounted reward: " << totalDiscountedReward << endl;
         // if (success)
         //     os << "Run successful: True\n";
