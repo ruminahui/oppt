@@ -17,6 +17,7 @@ int main(int argc, char const* argv[])
 
     // Attemtp to set up problem environment within server
     if(!server.setupOpptEnvironment(argc, argv)){
+        std::cout << " FAILED TO SETUP ENVIRONMENT" << std::endl;
     	return -1; // FAILED
     }
 
@@ -27,6 +28,7 @@ int main(int argc, char const* argv[])
     
     while(true){
     	// Keep serving
+        std::cout << "PARSING MESSAGES" << std::endl;
     	server.parseMessage();
     }
 

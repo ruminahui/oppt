@@ -32,7 +32,7 @@ private:
 public:
     
     NcapServer(FloatType planTime): 
-        ctx_{1}, ipc_sock_{ctx_, zmq::socket_type::req}, planningTime_{planTime} {
+        ctx_{1}, ipc_sock_{ctx_, zmq::socket_type::rep}, planningTime_{planTime} {
         // Initialize problem environment
         problemEnvironment_ = std::make_unique<oppt::ProblemEnvironment>();
     }
@@ -43,6 +43,9 @@ public:
 
     /*** Sets up the problem environment according to the config file provided ***/
     bool setupOpptEnvironment(int argc, char const* argv[]){
+        std::cout << "INPUT WAS" << std::endl;
+        std::cout << argv << std::endl;
+
         int ret = problemEnvironment_->setup<solvers::ABT, oppt::ABTExtendedOptions>(argc, argv);
         if(ret != 0){
             return false;
@@ -88,6 +91,8 @@ public:
     void parseMessage(){
          // receive reply
         zmq::message_t zmq_msg;
+        std::cout << "RECEIVING MESSAGE" << std::endl;
+
         ipc_sock_.recv(zmq_msg);
         const std::string recv_msg(zmq_msg.data<char>(), zmq_msg.size());
         std::cout << "MESSAGE RECEIVED WAS\n" <<  recv_msg << std::endl;
@@ -97,13 +102,13 @@ public:
         
 
         // Server request according to type
-        if( compareStrings(json_struct["TYPE"], "RESTART") ){
+        if( compareStrings(json_struct["TYPE"], "RESET") ){
             std::cout << "RESTART QUERY RECEIVED" << std::endl;
             resetSolver(json_struct);
         } else if( compareStrings(json_struct["TYPE"], "NEXT_ACTION") ){
             std::cout << "ACTION QUERY RECEIVED" << std::endl;
             sendNextAction(json_struct);
-        } else if( compareStrings(json_struct["TYPE"], "OBS") ){
+        } else if( compareStrings(json_struct["TYPE"], "UPDATE_BELIEF") ){
             std::cout << "BELIEF UPDATE RECEIVED" << std::endl;
             updateCurrentBelief(json_struct);
         }
@@ -172,7 +177,7 @@ private:
     /*** Updates believed based on the observation provided in the req message ***/
     void updateCurrentBelief(json json_req){
         // Modify local copy of the json struct to send reply message
-        json_req["TYPE"] = "OBS_ACK";
+        json_req["TYPE"] = "UPDATE_BELIEF_ACK";
 
         // Parse observation from message
         VectorFloat obsSeen{json_req["REL_LONGIT"], json_req["REL_HORIZONTAL"]};
