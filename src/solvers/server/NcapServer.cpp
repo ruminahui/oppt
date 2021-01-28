@@ -21,6 +21,8 @@ int main(int argc, char const* argv[])
     	return -1; // FAILED
     }
 
+    std::cout << "ENVIRONMENT SETUP SUCCESFULLY" << std::endl;
+
 
     // Environment set up was successful, start up server
     server.bindServer(ipc_path);
