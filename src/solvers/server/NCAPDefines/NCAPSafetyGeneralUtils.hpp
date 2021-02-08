@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License along with OPPT. 
  * If not, see http://www.gnu.org/licenses/.
  */
-#ifndef _NCAP_COLLISION_GENERAL_UTILS_HPP_
-#define _NCAP_COLLISION_GENERAL_UTILS_HPP_
+#ifndef _NCAP_SAFETY_GENERAL_UTILS_HPP_
+#define _NCAP_SAFETY_GENERAL_UTILS_HPP_
 #include "oppt/plugin/PluginOptions.hpp"
 
 namespace oppt
@@ -62,12 +62,12 @@ enum SAFE_TRAJ{SAFE_PED_LONGIT, SAFE_PED_HOZ};
 
 
 // Options object to parse information from configuration file
-class NCAPCollisionGeneralOptions: public PluginOptions
+class NCAPSafetyGeneralOptions: public PluginOptions
 {
 public:
-    NCAPCollisionGeneralOptions() = default;
+    NCAPSafetyGeneralOptions() = default;
 
-    virtual ~NCAPCollisionGeneralOptions() = default;
+    virtual ~NCAPSafetyGeneralOptions() = default;
 
 
     // General variables
@@ -80,8 +80,6 @@ public:
     VectorFloat intentionDiscretization;
     VectorFloat intentionDiscretizationLower;
     VectorFloat intentionDiscretizationUpper;
-    std::string safeTrajFilePath = "";
-    std::string safeTrajKey = "";
 
 
     // Goal location for the pedeinitialVelocitystrian for the plugins in the "safety case"
@@ -131,121 +129,103 @@ public:
         // Typical recommended deceleration rates
         parser->addOption<FloatType>("generalOptions",
                                        "brakingDeceleration",
-                                   &NCAPCollisionGeneralOptions::brakingDeceleration);
+                                   &NCAPSafetyGeneralOptions::brakingDeceleration);
 
         // Controller type multiplier
         parser->addOption<FloatType>("generalOptions",
                                        "controllerMultiplier",
-                                   &NCAPCollisionGeneralOptions::controllerMultiplier);
+                                   &NCAPSafetyGeneralOptions::controllerMultiplier);
 
         parser->addOption<VectorFloat>("generalOptions",
                                        "goalMargins",
-                                   &NCAPCollisionGeneralOptions::goalMargins);
+                                   &NCAPSafetyGeneralOptions::goalMargins);
     
         parser->addOption<std::string>("generalOptions",
                                        "carLinkName",
-                                   &NCAPCollisionGeneralOptions::carLinkName);
+                                   &NCAPSafetyGeneralOptions::carLinkName);
 
         parser->addOption<std::string>("generalOptions",
                                        "pedLinkName",
-                                   &NCAPCollisionGeneralOptions::pedLinkName);
+                                   &NCAPSafetyGeneralOptions::pedLinkName);
 
         parser->addOption<VectorFloat>("generalOptions",
                                      "carDimensions",
-                                     &NCAPCollisionGeneralOptions::carDimensions);
+                                     &NCAPSafetyGeneralOptions::carDimensions);
 
         parser->addOption<VectorFloat>("generalOptions",
                                      "pedDimensions",
-                                     &NCAPCollisionGeneralOptions::pedDimensions);
+                                     &NCAPSafetyGeneralOptions::pedDimensions);
 
         // Parse safety goal location
         parser->addOption<VectorFloat>("generalOptions",
                                      "safetyGoalArea",
-                                     &NCAPCollisionGeneralOptions::safetyGoal);
+                                     &NCAPSafetyGeneralOptions::safetyGoal);
 
-        // Parse safety trajectory points along the longitudinal coord
-        parser->addOption<VectorFloat>("generalOptions",
-                                    "pedSafeTrajLongit",
-                                    &NCAPCollisionGeneralOptions::pedSafeTrajLongit);
-        parser->addOption<VectorFloat>("generalOptions",
-                                    "pedSafeTrajHoz",
-                                    &NCAPCollisionGeneralOptions::pedSafeTrajHoz);
 
-        // Intention discretization
         parser->addOption<VectorFloat>("generalOptions",
                                     "intentionDiscretization",
-                                    &NCAPCollisionGeneralOptions::intentionDiscretization);
+                                    &NCAPSafetyGeneralOptions::intentionDiscretization);
 
         parser->addOption<VectorFloat>("generalOptions",
                                     "intentionDiscretizationUpper",
-                                    &NCAPCollisionGeneralOptions::intentionDiscretizationUpper);
+                                    &NCAPSafetyGeneralOptions::intentionDiscretizationUpper);
         parser->addOption<VectorFloat>("generalOptions",
                                     "intentionDiscretizationLower",
-                                    &NCAPCollisionGeneralOptions::intentionDiscretizationLower);
+                                    &NCAPSafetyGeneralOptions::intentionDiscretizationLower);
 
-        // Load safe trajs from a file
-        parser->addOption<std::string>("generalOptions",
-                                    "safeTrajFilePath",
-                                    &NCAPCollisionGeneralOptions::safeTrajFilePath);
-
-        parser->addOption<std::string>("generalOptions",
-                                    "safeTrajIndex",
-                                    &NCAPCollisionGeneralOptions::safeTrajKey);
-
-
-
+    
 
         /*** Initial belief options ***/
         // Lower starting bound
         parser->addOption<VectorFloat>("initialBeliefOptions",
                                        "lowerBound",
-                                       &NCAPCollisionGeneralOptions::lowerBound);
+                                       &NCAPSafetyGeneralOptions::lowerBound);
         // Upper starting bound
 	     parser->addOption<VectorFloat>("initialBeliefOptions",
                                        "upperBound",
-                                       &NCAPCollisionGeneralOptions::upperBound);
+                                       &NCAPSafetyGeneralOptions::upperBound);
 
         /*** Transition options ***/
         parser->addOption<FloatType>("transitionPluginOptions",
                                      "processError",
-                                     &NCAPCollisionGeneralOptions::processError);
+                                     &NCAPSafetyGeneralOptions::processError);
 	
     	parser->addOption<FloatType>("transitionPluginOptions",
                                          "fixedStepTime",
-                                         &NCAPCollisionGeneralOptions::fixedStepTime);
+                                         &NCAPSafetyGeneralOptions::fixedStepTime);
 
         // Action discretization options
         VectorUInt defVec;
         parser->addOptionWithDefault<VectorUInt>("ABT",
                                                 "actionDiscretization", 
-                                                &NCAPCollisionGeneralOptions::actionSpaceDiscretization, defVec);
+                                                &NCAPSafetyGeneralOptions::actionSpaceDiscretization, defVec);
 
 
         /*** Observation Plugin options ***/
         parser->addOption<FloatType>("observationPluginOptions",
                                      "carObsError",
-                                     &NCAPCollisionGeneralOptions::carObsError);
+                                     &NCAPSafetyGeneralOptions::carObsError);
 
 
 
         /*** Reward Plugin options ***/
         parser->addOption<FloatType>("rewardPluginOptions",
                                          "goalReward",
-                                         &NCAPCollisionGeneralOptions::goalReward);
+                                         &NCAPSafetyGeneralOptions::goalReward);
 
         parser->addOption<FloatType>("rewardPluginOptions",
                                          "terminalPenalty",
-                                         &NCAPCollisionGeneralOptions::terminalPenalty);
+                                         &NCAPSafetyGeneralOptions::terminalPenalty);
 
         parser->addOption<FloatType>("rewardPluginOptions",
                                          "stepPenalty",
-                                         &NCAPCollisionGeneralOptions::stepPenalty);
+                                         &NCAPSafetyGeneralOptions::stepPenalty);
 
 
         /*** Terminal Plugin options ***/
         parser->addOption<FloatType>("terminalPluginOptions",
                                          "avoidedDistance",
-                                         &NCAPCollisionGeneralOptions::avoidedDistance);
+                                         &NCAPSafetyGeneralOptions::avoidedDistance);
 
     }
 

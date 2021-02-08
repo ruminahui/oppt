@@ -202,6 +202,8 @@ private:
             }
         }
 
+        updateViewer();
+
         // Send reply
         const std::string reply_msg = json_req.dump();
         zmq::message_t reply{reply_msg.cbegin(), reply_msg.cend()};
