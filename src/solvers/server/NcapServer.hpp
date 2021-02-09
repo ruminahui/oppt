@@ -4,7 +4,7 @@
 
 #include <zmq.hpp>
 #include "oppt/problemEnvironment/ProblemEnvironment.hpp"
-#include "NCAPCollisionObservation.hpp"
+#include "NCAPGeneralObservation.hpp"
 #include "../ABT/solverABT.hpp"
 #include "../ABT/ABTOptions.hpp"
 #include <string>
@@ -191,7 +191,7 @@ private:
             json_req["STATUS"] = false;
         } else {
             // Attempt to update belief
-            ObservationSharedPtr latestObservation = std::make_shared<NCAPCollisionObservation>(obsSeen);
+            ObservationSharedPtr latestObservation = std::make_shared<NCAPGeneralObservation>(obsSeen);
             // Update the belief
             if (!solver_->updateBelief(lastAction_, latestObservation, terminalReached)) {
                 std::cout << "COULDN'T UPDATE BELIEF" << std::endl;

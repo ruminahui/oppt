@@ -318,8 +318,12 @@ protected:
         filterRequest->randomEngine = robotPlanningEnvironment_->getRobot()->getRandomEngine();
 
         FilterResultPtr filterResult = particleFilter_->filter(filterRequest);
-        if (filterResult->particles.empty())
+        if (filterResult->particles.empty()){
             return nullptr;
+        }
+            
+
+
         return std::move(filterResult);
     }
 
