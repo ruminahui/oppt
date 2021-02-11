@@ -226,6 +226,13 @@ FilterResultPtr ParticleFilter::filter(const FilterRequestPtr& filterRequest)
             VectorFloat particleState = currentParticle->getState()->as<VectorState>()->asVector();
             VectorFloat approxState(particleState);
 
+            // Add noise
+            unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+            std::default_random_engine generator(seed1); //gen(time(NULL))
+
+            std::uniform_real_distribution<FloatType> distribution(0, 0.5);
+            FloatType sample = (FloatType) distribution(generator);
+
             // Approximate ped info with same ped info
             for(size_t ped_info_index = 0; ped_info_index < 2; ++ped_info_index){
                 approxState[ped_info_index] = particleState[ped_info_index];
@@ -233,7 +240,8 @@ FilterResultPtr ParticleFilter::filter(const FilterRequestPtr& filterRequest)
 
             // Adjust vehicle location based on noise obs
             for(size_t obs_index = 0; obs_index < 2; ++obs_index){
-                approxState[obs_index + 2] = particleState[obs_index + 2] + obsSeen[obs_index]; 
+                FloatType obs_noise = (FloatType) distribution(generator);
+                approxState[obs_index + 2] = particleState[obs_index + 2] + obsSeen[obs_index] + obs_noise; 
             }
 
 

@@ -79,7 +79,10 @@ public:
     bool updateViewer(){
         auto particles = static_cast<solvers::ABT *>(problemEnvironment_->getSolver())->getBeliefParticles();
         auto currentState = particles[0];
+        VectorFloat currentStateVec = currentState->as<VectorState>()->asVector();
+        printVector(currentStateVec, "estimated state here ");
         problemEnvironment_->updateViewer(currentState,particles);
+        getchar();
     }
 
 
@@ -193,7 +196,7 @@ private:
             // Attempt to update belief
             ObservationSharedPtr latestObservation = std::make_shared<NCAPGeneralObservation>(obsSeen);
             // Update the belief
-            if (!solver_->updateBelief(lastAction_, latestObservation, terminalReached)) {
+            if (!solver_->updateBelief(lastAction_, latestObservation, true)) {
                 std::cout << "COULDN'T UPDATE BELIEF" << std::endl;
                 json_req["STATUS"] = false;
             } else {  
