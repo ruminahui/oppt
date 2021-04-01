@@ -82,7 +82,7 @@ public:
         VectorFloat currentStateVec = currentState->as<VectorState>()->asVector();
         printVector(currentStateVec, "estimated state here ");
         problemEnvironment_->updateViewer(currentState,particles);
-        getchar();
+        //getchar();
     }
 
 

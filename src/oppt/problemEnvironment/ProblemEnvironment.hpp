@@ -887,7 +887,7 @@ private:
             if (terminal)
                 break;
 
-            getchar();
+            //getchar();
         }
 
         FloatType totalTimeTaken = (oppt::clock_ms() - t0) / 1000.0;
